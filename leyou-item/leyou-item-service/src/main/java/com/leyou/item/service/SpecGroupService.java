@@ -37,8 +37,13 @@ public class SpecGroupService {
      * @param gid
      * @return
      */
-    public List<SpecParam> queryParamsByGid(Long gid) {
-        SpecParam record = new SpecParam(){{setGroupId(gid);}};
+    public List<SpecParam> queryParamsByGid(Long gid, Long cid, Boolean generic, Boolean searching) {
+        SpecParam record = new SpecParam(){{
+            setGroupId(gid);
+            setCid(cid);
+            setGeneric(generic);
+            setSearching(searching);
+        }};
         return specParamMapper.select(record);
     }
 }

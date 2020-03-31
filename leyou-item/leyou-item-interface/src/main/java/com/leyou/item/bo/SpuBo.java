@@ -1,6 +1,10 @@
 package com.leyou.item.bo;
 
+import com.leyou.item.pojo.Sku;
 import com.leyou.item.pojo.Spu;
+import com.leyou.item.pojo.SpuDetail;
+
+import java.util.List;
 
 /**
  * @DESC:
@@ -14,6 +18,12 @@ public class SpuBo extends Spu {
 
     //品牌
     private String bname;
+
+    //商品详情
+    private SpuDetail spuDetail;
+
+    //sku列表
+    private List<Sku> skus;
 
     public String getCname() {
         return cname;
@@ -29,5 +39,21 @@ public class SpuBo extends Spu {
 
     public void setBname(String bname) {
         this.bname = bname;
+    }
+
+    public SpuDetail getSpuDetail() {
+        return spuDetail;
+    }
+
+    public void setSpuDetail(SpuDetail spuDetail) {
+        this.spuDetail = spuDetail;
+    }
+
+    public List<Sku> getSkus() {
+        return skus;
+    }
+
+    public void setSkus(List<Sku> skus) {
+        this.skus = skus;
     }
 }
