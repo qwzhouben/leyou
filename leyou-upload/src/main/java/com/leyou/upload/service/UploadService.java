@@ -41,7 +41,7 @@ public class UploadService {
                 return null;
             }
             // 保存到服务器
-            file.transferTo(new File("D:\\leyou\\image\\" + originalFilename));
+            file.transferTo(new File("D:\\leyou\\images\\" + originalFilename));
             //生成url
             return "http://image.leyou.com/" + originalFilename;
         } catch (IOException e) {
