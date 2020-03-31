@@ -5,15 +5,13 @@ import com.github.pagehelper.PageInfo;
 import com.leyou.common.pojo.PageResult;
 import com.leyou.item.bo.SpuBo;
 import com.leyou.item.mapper.*;
-import com.leyou.item.pojo.Brand;
-import com.leyou.item.pojo.Spu;
-import com.leyou.item.pojo.SpuDetail;
-import com.leyou.item.pojo.Stock;
+import com.leyou.item.pojo.*;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.Arrays;
@@ -127,5 +125,64 @@ public class GoodsService {
             stock.setStock(sku.getStock());
             this.stockMapper.insertSelective(stock);
         });
+    }
+
+    /**
+     * 根据spuId查询spu详情
+     * @param spuId
+     * @return
+     */
+    public SpuDetail querySpuDetailBySpuId(Long spuId) {
+        return spuDetailMapper.selectByPrimaryKey(spuId);
+    }
+
+    /**
+     * 根据spuId查询sku
+     * @param spuId
+     * @return
+     */
+    public List<Sku> querySkusBySpuId(Long spuId) {
+        Sku record = new Sku(){{setSpuId(spuId);}};
+        List<Sku> skus = skuMapper.select(record);
+        return skus.stream()
+                .map(sku -> {
+                    Stock stock = stockMapper.selectByPrimaryKey(sku.getId());
+                    sku.setStock(stock.getStock());
+                    return sku;
+                })
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * 修改商品
+     * @param spuBo
+     */
+    @Transactional
+    public void updateGoods(SpuBo spuBo) {
+        //查询以前的sku
+        List<Sku> skus = this.querySkusBySpuId(spuBo.getId());
+        // 如果以前存在，则删除
+        if (!CollectionUtils.isEmpty(skus)) {
+            // 删除以前库存
+            List<Long> skuIds = skus.stream().map(sku -> sku.getId()).collect(Collectors.toList());
+            Example example = new Example(Stock.class);
+            example.createCriteria().andIn("skuId", skuIds);
+            stockMapper.deleteByExample(example);
+
+            // 删除以前的sku
+            Sku record = new Sku(){{setSpuId(spuBo.getId());}};
+            skuMapper.delete(record);
+        }
+
+        // 新增sku和库存
+        saveSkuAndStock(spuBo);
+        // 更新spu
+        Spu record = new Spu(){{
+            setLastUpdateTime(new Date());
+        }};
+        spuMapper.updateByPrimaryKeySelective(record);
+
+        // 更新spu详情
+        spuDetailMapper.updateByPrimaryKeySelective(spuBo.getSpuDetail());
     }
 }
