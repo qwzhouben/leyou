@@ -12,5 +12,6 @@ zuul:
   prefix: /api # 路由路径前缀
   routes:
     item-service: /item/**  #商品服务映射
+    search-service: /search/** #搜索服务映射
 
 

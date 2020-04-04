@@ -5,10 +5,7 @@ import com.leyou.item.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -40,5 +37,19 @@ public class CategoryController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(categories);
+    }
+
+    /**
+     * 根据id查询名称
+     * @param ids
+     * @return
+     */
+    @GetMapping
+    public ResponseEntity<List<String>> queryNamesByIds(@RequestParam("ids") List<Long> ids) {
+        List<String> names = categoryService.queryNamesByIds(ids);
+        if (CollectionUtils.isEmpty(names)) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(names);
     }
 }
