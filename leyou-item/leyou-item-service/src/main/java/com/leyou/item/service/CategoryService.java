@@ -5,6 +5,7 @@ import com.leyou.item.pojo.Category;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,5 +39,12 @@ public class CategoryService {
     public List<String> queryNamesByIds(List<Long> ids) {
         List<Category> categories = categoryMapper.selectByIdList(ids);
         return categories.stream().map(category -> category.getName()).collect(Collectors.toList());
+    }
+
+    public List<Category> queryAllByCid3(Long id) {
+        Category c3 = categoryMapper.selectByPrimaryKey(id);
+        Category c2 = categoryMapper.selectByPrimaryKey(c3.getParentId());
+        Category c1 = categoryMapper.selectByPrimaryKey(c2.getParentId());
+        return Arrays.asList(c1, c2, c3);
     }
 }
