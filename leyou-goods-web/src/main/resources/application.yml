@@ -5,6 +5,11 @@ spring:
     name: goods-web
   thymeleaf:
     cache: false
+  rabbitmq:
+    host: 192.168.1.177
+    username: leyou
+    password: leyou
+    virtual-host: /leyou
 eureka:
   client:
     service-url:
@@ -12,3 +17,4 @@ eureka:
   instance:
     lease-expiration-duration-in-seconds: 5
     lease-renewal-interval-in-seconds: 10
+

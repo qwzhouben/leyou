@@ -318,4 +318,23 @@ public class SearchService {
         return result;
     }
 
+    /**
+     * 新增或更新索引
+     * @param spuId
+     */
+    public void createIndex(Long spuId) throws IOException {
+        Spu spu = goodsClient.querySpuById(spuId);
+        //构建商品
+        Goods goods = buildGoods(spu);
+        //保存数据到索引库
+        goodsRepository.save(goods);
+    }
+
+    /**
+     * 删除索引
+     * @param spuId
+     */
+    public void deleteIndex(Long spuId) {
+        goodsRepository.deleteById(spuId);
+    }
 }

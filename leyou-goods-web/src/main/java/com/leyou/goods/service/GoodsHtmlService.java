@@ -60,4 +60,14 @@ public class GoodsHtmlService {
     public void asyncExecute(Long spuId) {
         ThreadUtils.execute(() -> createHtml(spuId));
     }
+
+    /**
+     * 删除静态页面
+     * @param spuId
+     */
+    public void deleteHtml(Long spuId) {
+        //创建输出流
+        File file = new File("D:\\application\\nginx-1.15.0\\nginx-1.15.0\\html\\item\\" + spuId + ".html");
+        file.deleteOnExit();
+    }
 }

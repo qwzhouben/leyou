@@ -7,6 +7,14 @@ spring:
     url: jdbc:mysql://localhost:3306/leyou?characterEncoding=utf-8&useSSL=false
     username: root
     password: 123456
+  rabbitmq:
+    host: 192.168.1.177
+    username: leyou
+    password: leyou
+    virtual-host: /leyou
+    template:
+      exchange: leyou.item.exchange # 缺省交换机名称时会用这个
+    publisher-confirms: true #生产者确认机制，确保消息会正确发送。如果发送失败会有错误回执，从而重新触发
 eureka:
   client:
     service-url:
@@ -16,6 +24,7 @@ eureka:
     lease-expiration-duration-in-seconds: 10  # 10秒不发送就过期
 mybatis:
   type-aliases-package: com.leyou.item.pojo
+
 
 
 
